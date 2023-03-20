@@ -1,12 +1,14 @@
-
-
+//declare empty array for library
 let myLibrary = [];
 
-function Book(){
 
+
+//Object contructor
+function Book(title, author, pages, read){
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.read = read;
+    
 }
 
-function addBookToLibrary(){
-
-    //do stuff here
-}
