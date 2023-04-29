@@ -13,35 +13,52 @@ addBookModal.addEventListener('submit', (event) => {
   const pages = document.getElementById('pages').value;
   const read = document.getElementById('read').checked;
 
-  const newBook = new Book (title, author, pages, read);
-  myLibrary.push(newBook);
+  const newBook = new Book(title, author, pages, read);
+  myLibrary.addBook(newBook);
   displayBooks();
   console.log(title, author, pages, read);
 
   addBookModal.style.display = 'none';
-  
-  
 });
 
-let myLibrary = [];
+class Book {
+  constructor(title, author, pages, read) {
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.read = read;
+  }
 
-function Book (title, author, pages, read){
-
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.read = read;
+  toggleReadStatus() {
+    this.read = !this.read;
+  }
 }
 
-function displayBooks(){
+class Library {
+  constructor() {
+    this.books = [];
+  }
+
+  addBook(book) {
+    this.books.push(book);
+  }
+
+  removeBook(index) {
+    this.books.splice(index, 1);
+  }
+}
+
+const myLibrary = new Library();
+
+function displayBooks() {
   const container = document.querySelector('#book-container');
 
-  while(container.firstChild){
+  while (container.firstChild) {
     container.removeChild(container.firstChild);
   }
 
-  for(let i = 0 ; i < myLibrary.length; i++){
-    const book = myLibrary[i];
+  for (let i = 0; i < myLibrary.books.length; i++) {
+    const book = myLibrary.books[i];
     const card = document.createElement('div');
     card.classList.add('book-card');
 
@@ -65,7 +82,7 @@ function displayBooks(){
     deleteButton.textContent = 'Delete';
     deleteButton.classList.add('delete');
     deleteButton.addEventListener('click', () => {
-      removeBook(i);
+      myLibrary.removeBook(i);
       displayBooks();
     });
     card.appendChild(deleteButton);
@@ -74,16 +91,11 @@ function displayBooks(){
     readButton.textContent = 'Change Status';
     readButton.classList.add('read');
     readButton.addEventListener('click', () => {
-      book.read = !book.read;
+      book.toggleReadStatus();
       displayBooks();
     });
     card.appendChild(readButton);
 
     container.appendChild(card);
-    
   }
-}
-
-function removeBook(index) {
-  myLibrary.splice(index, 1);
 }
